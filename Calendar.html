@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Calendar</title>
+  </head>
+  <body>
+    <script>
+
+        function drawCalendar(year, month){
+            console.log("      " +year + "년 " + month + "월");
+            console.log("");
+
+            var today = new Date();
+            today = new Date(year, month-1, today.getDate());
+            var startDay = today.getDay(); //시작요일 (일요일=0, 토요일=6)
+            var endDay = new Date(year, month, 0).getDate(); //끝나는 날짜
+            var oneWeek = "";
+
+            for(var i=0; i<startDay; i++){// [] [] [] 시작전 공백 더하기
+              oneWeek += "   ";
+            }
+            
+            for(var i=1; i<=endDay; i++){
+              var iDay = new Date(year, month-1, i);
+              var tmp = "00" + i;
+              tmp = tmp.slice(-2);
+
+              if(iDay.getDay() == 6 || i == endDay){ //토요일이면 줄바꿈
+                oneWeek += " " + tmp;
+                console.log(oneWeek);
+                oneWeek = "";
+              }
+              else
+                oneWeek += " " + tmp;
+            }
+        }
+            
+        drawCalendar(2021, 7);
+
+
+
+
+    </script>
+  </body>
+</html>
