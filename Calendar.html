@@ -4,43 +4,71 @@
     <meta charset="utf-8">
     <title>Calendar</title>
   </head>
-  <body>
-    <script>
+  <script language="javascript">
+    var today = new Date();
+    var date = new Date();
 
-        function drawCalendar(year, month){
-            console.log("      " +year + "년 " + month + "월");
-            console.log("");
+    function drawCalendar(){
+        var startDate = new Date(today.getFullYear(), today.getMonth(), 1);//첫째날
+        var startDay = today.getDay(); //시작요일 (일요일=0, 토요일=6)
+        var endDate = new Date(today.getFullYear(), today.getMonth()+1, 0).getDate(); //끝나는 날짜
 
-            var today = new Date();
-            today = new Date(year, month-1, today.getDate());
-            var startDay = today.getDay(); //시작요일 (일요일=0, 토요일=6)
-            var endDay = new Date(year, month, 0).getDate(); //끝나는 날짜
-            var oneWeek = "";
+        var tmpCal = document.getElementById("calendar");
+        var now = document.getElementById("now");
+        now.innerHTML = today.getFullYear() + "년" + (today.getMonth() + 1) + "월";
 
-            for(var i=0; i<startDay; i++){// [] [] [] 시작전 공백 더하기
-              oneWeek += "   ";
-            }
-            
-            for(var i=1; i<=endDay; i++){
-              var iDay = new Date(year, month-1, i);
-              var tmp = "00" + i;
-              tmp = tmp.slice(-2);
-
-              if(iDay.getDay() == 6 || i == endDay){ //토요일이면 줄바꿈
-                oneWeek += " " + tmp;
-                console.log(oneWeek);
-                oneWeek = "";
-              }
-              else
-                oneWeek += " " + tmp;
-            }
+        while(tmpCal.rows.length > 2){
+          tmpCal.deleteRow(tmpCal.rows.length - 1);
         }
-            
-        drawCalendar(2021, 7);
+        var row = null;
+        row = tmpCal.insertRow();
+        var cnt = startDay;
 
+        for(var i=0; i<startDay; i++){
+          cell = row.insertCell();
+        }
 
+        for(var i=1; i <= endDate; i++){
+          cell = row.insertCell();
+          cell.innerHTML = i;
+          cnt++;
 
+          if(cnt % 7 == 0){
+            row = calendar.insertRow();
+          }
+        }
+    }
 
-    </script>
+    function beforeMonth(){
+      today = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+      drawCalendar();
+    }
+
+    function nextMonth(){
+      today = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
+      drawCalendar();
+    }
+        
+
+  </script>
+
+  <body onload="drawCalendar();">
+    <table id="calendar">
+      <tr>
+        <td><button onclick="beforeMonth();">이전달</button></td>
+        <td id="now"></td>
+        <td><button onclick="nextMonth();">다음달</button></td>
+      </tr>
+      <tr>
+        <td>일</td>
+        <td>월</td>
+        <td>화</td>
+        <td>수</td>
+        <td>목</td>
+        <td>금</td>
+        <td>토</td>
+      </tr>
+    </table>
+
   </body>
 </html>
