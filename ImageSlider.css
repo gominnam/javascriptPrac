@@ -1,0 +1,18 @@
+.gallery{
+    overflow: hidden;
+}
+
+.album{
+    width:400vw;
+    overflow: hidden;
+    transform:  0.5s;
+}
+
+.picture {
+    width: 100vw;
+    float: left;
+}
+
+.picture img {
+    width: 50%;
+}

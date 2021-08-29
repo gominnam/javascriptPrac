@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ImageSlider</title>
+    <link href="ImageSlider.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>  
+  </head>
+  <body style="margin:0">
+      
+      <div class="gallery">
+        <div class="album">
+            <div class="picture">
+              <img src="1.jpg">
+            </div>
+            <div class="picture">
+              <img src="2.jpg">
+            </div>
+            <div class="picture">
+              <img src="3.jpg">
+            </div>
+            <div class="picture">
+              <img src="4.jpg">
+            </div>
+        </div>
+      </div>
+      <button class="moveLeft"><</button>
+      <button class="btn1">1</button>
+      <button class="btn2">2</button>
+      <button class="btn3">3</button>
+      <button class="btn4">4</button>
+      <button class="moveRight">></button>
+
+  </body>
+  <script type="text/javascript">
+    var curPos = 0;
+    var t;
+    showSlides();
+
+    //left click Event
+    document.querySelector('.moveLeft').addEventListener('click', function(){
+        if(curPos == 0){
+            curPos = -300;
+        }
+        else curPos += 100;
+
+        document.querySelector('.album').style.transform = ('translate(' + curPos + 'vw)');
+    })
+
+    //rigth click Event
+    document.querySelector('.moveRight').addEventListener('click', function(){
+        if(curPos == -300){
+            curPos = 0;
+        }
+        else curPos -= 100;
+
+        document.querySelector('.album').style.transform = ('translate(' + curPos + 'vw)');
+    })
+
+    //number button event
+    //$(.btn).bind("click", function(){ })
+    document.querySelector('.btn1').addEventListener('click', function(){
+        document.querySelector('.album').style.transform = 'translate(0vw)';
+    })
+    document.querySelector('.btn2').addEventListener('click', function(){
+        curPos = 'translate(-100vw)';
+        document.querySelector('.album').style.transform = 'translate(-100vw)';
+    })
+    document.querySelector('.btn3').addEventListener('click', function(){
+        document.querySelector('.album').style.transform = 'translate(-200vw)';
+    })
+    document.querySelector('.btn4').addEventListener('click', function(){
+        document.querySelector('.album').style.transform = 'translate(-300vw)';
+    })
+
+    //auto img sliding 5s
+    function showSlides(){
+        if(curPos == -300){
+            curPos = 0;
+        }
+        else curPos -= 100;
+
+        document.querySelector('.album').style.transform = ('translate(' + curPos + 'vw)');
+        t = setTimeout(showSlides, 5000);
+    }
+
+    //
+    
+    $(".picture").on("mouseenter", function(ev) {
+        clearTimeout(t);
+    });
+
+    $(".picture").on("mouseleave", function(ev) {
+        showSlides();
+    });
+    
+
+  </script>
+  
+</html>
