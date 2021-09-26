@@ -1,5 +1,7 @@
 class Game2048{
     constructor(className){
+        this.className = className;    
+
         $(className).find("td").css({
             "border": "3px solid #DRDRDR",
             "height": "100px",
@@ -9,17 +11,19 @@ class Game2048{
             "font-weight": "bold",
             "color": "#F49551",
             "background-color": "#BEBEBE"
-        })
-        
-    }
+        });
+    };
 }
-var score = 0;
-var board = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
+var score;
+var board;
 
 init();
 
 //초기화 화면
 function init(){
+    score = 0;
+    board = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
+
     for(var i=0; i<4; i++){
         for(var j=0; j<4; j++){
             var boardId = i + "" + j;
@@ -36,7 +40,6 @@ function createNumber(){
     for(var i=0; i<4; i++){
         for(var j=0; j<4; j++){
             var boardId = i + "" + j;
-            //$('#' + boardId).text(0);
             $('#' + boardId).text(board[i][j]);
         }
     }
@@ -46,10 +49,10 @@ function createNumber(){
         var x = parseInt(Math.random()*4);
         var y = parseInt(Math.random()*4);
         var pos = x + "" + y;
-        console.log(pos);
         if($('#' + pos).text() == 0){
             $('#' + pos).text(2);
-            board[y][x] = 2;
+            console.log(pos + " : check");
+            board[x][y] = 2;
             check = false;
         }
     }
@@ -125,8 +128,15 @@ function calculation(){
     var tmp = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     console.log(board);
     for(var i=0; i<4; i++){
-        var rowArr = [board[0][i], board[1][i], board[2][i], board[3][i]];
+        var rowArr = [0, 0, 0, 0];
+        var pos = 0;
+        for(var j=0; j<4; j++){
+            if(board[j][i] == 0) continue;
+            rowArr[pos++] = board[j][i];
+        }
+        //var rowArr = [board[0][i], board[1][i], board[2][i], board[3][i]];
         console.log(rowArr);
+       
         for(var j=0; j<3; j++){//덧셈 2 0 0 2 일 때 계산 안되는 문제 해결하기
             if(rowArr[j] == 0) continue;
             else if(rowArr[j] == rowArr[j+1]){
@@ -136,7 +146,7 @@ function calculation(){
                 flag = true;
             }
         }
-        var pos = 0;
+        pos = 0;
         for(var j=0; j<4; j++){
             if(rowArr[j] != 0){
                 //tmp[i][pos++] = rowArr[j];
@@ -154,7 +164,8 @@ function calculation(){
                 if(board[i][j] > maxNum) maxNum = board[i][j];
             }
         }
-        alert("[The End]\n Score : " + score + "\nMax Number : " + maxNum);
+        alert("[The End]\nScore : " + score + "\nMax Number : " + maxNum);
     }
     //else createNumber();
 }
+
