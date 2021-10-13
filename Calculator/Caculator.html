@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Calculator</title>
+    </head>
+    <body>
+        <script>
+            var str = prompt("계산할 수식을 중위표기식으로 입력하시오."); 
+            var postfix = ""; // 1) 완성될 후위표기식 저장할 문자열 변수
+            var s = []; // 2) 스택 s를 준비한다.
+            var tmp = ""; // 숫자를 담을 임시 변수
+            for(var i=0; i<str.length; i++){ // 3) 문자열 형태의 중위표기식을 앞에서부터 한글자씩 뽑아내서, 그 글자를 c라고 칭한다.
+                var c = str[i];
+                if(!isNan(parseInt(c))) {
+                    tmp += c;
+                    continue;
+                }
+                if(c == "(") s.push(c); // 3-2) c가 '(' 인 경우, s에 push한다.
+                if(c == ")") { // 3-3) 만약 c가 ')' 라면, s에서 여는 괄호가 나올때까지 모든 연산자를 pop하여 postfix의 오른쪽 끝에 붙여넣고, s에 남아있는 괄호는 제거
+                    while(true){
+                        var o = s.pop();
+                        if(o == "(") break;
+                        postfix += o;
+                    }
+                }
+                if(c == "+" || c == "-") s.push(c); // 3-4) 만약 c 가 +, - 라면, s 에 push한다.
+                if(c == "*" || c == "/"){ // 3-5) 만약 c 가 *, / 라면, s 에 최상단 데이터가 * 나 / 인 경우 s에서는 pop하여 postfix의 오른쪽 끝에 붙여넣고, c 는 s에 push한다.
+                    while(s[s.length-1] == "*" || s[s.length-1] == "/"){
+                        var o = s.pop();
+                        postfix += o;
+                    }
+                    s.push(c);
+                }
+            }
+            while(s.length){ // 4) s 에 남아있는 모든 연산자를 pop하여 괄호는 제거하고 postfix 의 오른쪽 끝에 붙여넣는다.
+                var o = s.pop();
+                if(o != "(" && o != ")") postfix += o;
+            }
+            console.log(postfix);
+
+            //
+            
+        
+
+
+
+
+
+
+
+        </script>
+    </body>
+</html>
