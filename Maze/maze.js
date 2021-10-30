@@ -19,60 +19,72 @@ class maze{
             //"border-left": "hidden"
         });
      
-        var Direction = [ [1, 0], [0, 1], [-1, 0], [0, -1] ];//상우하좌
-
+        var Direction = [ [1, 0, 2, 0, 0], [0, 1, 0, 2, 1], [-1, 0, -2, 0, 2], [0, -1, 0, -2, 3] ];//상우하좌(1칸 2칸) + 방향
         var mazeCell = [ [0, 0, 0, 0, 0],
                          [0, 0, 0, 0, 0],
                          [0, 0, 0, 0, 0],
                          [0, 0, 0, 0, 0],
                          [0, 0, 0, 0, 0] ];
-
-        var endCnt = 0;
+        var directionCheck = [0, 0, 0, 0];
         var stack = [];
-        while(true){
-            if(endCnt >= (mazeCell.length-2)*(mazeCell.length-2)) //
-                break;
+        function direction(){
+            var dir = Math.floor(Math.random() * (mazeCell.length-1));
+            if(dir == 0) return Direction[0];
+            if(dir == 1) return Direction[1];
+            if(dir == 2) return Direction[2];
+            if(dir == 3) return Direction[3];
+        }
 
+        function allDirectionCheck(){
+            for(var i=0; i<4; i++){
+                if(directionCheck[i] == 0) return true;
+            }
+            directionCheck = [0, 0, 0, 0];
+            return false;
+        }
+
+        while(true){
             var r1 = Math.floor(Math.random() * (mazeCell.length-1));
             var r2 = Math.floor(Math.random() * (mazeCell.length-1));
-            if(r1 == 0 || r1 == mazeCell.length-1 || r1 % 2 == 0 || r2 == 0 || r2 == mazeCell.length-1 || r2 % 2 == 0 || mazeCell[r1][r2] == 1) 
+
+            if(r1 == 0 || r1 == mazeCell.length-1 || r1 % 2 == 1 || r2 == 0 || r2 == mazeCell.length-1 || r2 % 2 == 1) 
                 continue;
+
             mazeCell[r1][r2] = 1;
-            endCnt++;
             stack.push([r1, r2]);
-            while(stack.length != 0){
-                var stdCell = stack.pop();
-                var dir;
-                var array = [0, 0, 0, 0];
-                var cnt = 0;
-                while(cnt != 4){
-                    var index = Math.floor(Math.random() * (mazeCell.length-1));
-                    if(array[index] == 1) continue;
-                    array[index] = 1;
-                    cnt++;
-                    dir = Direction[index];
-                    var ny = stdCell[0] + dir[0];
-                    var nx = stdCell[1] + dir[1];
-                    if(ny > 0 && ny < mazeCell.length-1 && nx > 0 && nx < mazeCell.length-1 && mazeCell[ny][nx] == 0) {
-                        stack.push([ny, nx]);
-                        mazeCell[ny][nx] = 1;
-                        var cId = stdCell[0] + "" + stdCell[1];
-                        console.log("stdCell : " + stdCell + ", new : " + ny + ":" + nx + ", " + index);
-                        if(index == 0) $('#' + cId).attr('style', "border-top:hidden");
-                        else if(index == 1) $('#' + cId).attr('style', "border-right:hidden");
-                        else if(index == 2) $('#' + cId).attr('style', "border-bottom:none");
-                        else if(index == 3) $('#' + cId).attr('style', "border-left:hidden");
-
-                        //else if(i == 3) $('#' + stdCell[0] + "" + stdCell[1]).css('border-left', 'none');
-                        cnt = 4;
-                    }
-                }
-
-                endCnt++;
-                console.log("endCnt : " + endCnt);
-            }
-            
             break;
+        }
+
+        while(stack.length != 0){
+            var standardCell = stack.pop();
+            while(allDirectionCheck()){
+                var dir = direction();
+                directionCheck[dir[4]] = 1;
+                var m1 = [standardCell[0] + dir[0], standardCell[1] + dir[1]];
+                var m2 = [standardCell[0] + dir[2], standardCell[1] + dir[3]];
+                if(m1[0] >= 0 && m1[0] < mazeCell.length && m1[1] >= 0 && m1[1] < mazeCell.length &&
+                    m2[0] >= 0 && m2[0] < mazeCell.length && m2[1] >= 0 && m2[1] < mazeCell.length && 
+                    mazeCell[m1[0]][m1[1]] == 0 && mazeCell[m2[0]][m2[1]] == 0){
+
+                    mazeCell[m1[0]][m1[1]] = 1;
+                    mazeCell[m2[0]][m2[1]] = 1;
+                    stack.push(standardCell);
+                    stack.push(m2);
+                    directionCheck = [0, 0, 0, 0];
+                    break;
+                }
+            }
+        }
+
+        mazeCell[0][1] = 1;
+        mazeCell[mazeCell.length-1][mazeCell[0].length-2] = 1;
+
+        for(var i =0; i<mazeCell.length; i++){
+            var str = "";
+            for(var j = 0; j<mazeCell[0].length; j++){
+                str += mazeCell[i][j] + " ";
+            }
+            console.log(str);
         }
     }
 }
